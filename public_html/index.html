@@ -2,8 +2,12 @@
 <html>
 
 <head>
-	<title>Page Title</title>
+	<title>Snake</title>
 	<style>
+		p {
+			margin: 3px;
+		}
+
 		table {
 			border: 1px solid black;
 			width: 600px;
@@ -24,7 +28,6 @@
 		.menu-bar {
 			width: 600px;
 			height: 60px;
-			display: block;
 			text-align: center;
 		}
 
@@ -50,13 +53,11 @@
 
 		.button {
 			background-color: #4CAF50;
-			/* Green */
 			border: none;
 			color: white;
 			padding: 15px 32px;
 			text-align: center;
 			text-decoration: none;
-			display: inline-block;
 			font-size: 16px;
 		}
 	</style>
@@ -65,10 +66,13 @@
 <body>
 
 	<div class="menu-bar">
-		<h1>Snake</h1> <input type="button" onclick="startGame()" class="button" value="Start game">
+		<h1>Snake</h1> <input type="button" onclick="startGame()" class="button" value="Restart game">
 		<h1>Score: </h1>
 		<h1 id="score">0</h1>
 	</div>
+	<p>Use the arrow keys on your keyboard to navigate the snake. <br>
+		The snake will start moving towards the food on the first key press.</p>
+
 	<table id="myTable"></table>
 
 
@@ -125,16 +129,16 @@
 				superNewLogicDirection = currentDirection;
 			}
 
-			if (e.keyCode == '37' && superNewLogicDirection !== 'right') {
+			if (e.keyCode == '37' && superNewLogicDirection !== 'right' && superNewLogicDirection !== 'left') {
 				keyQueue.push('left');
 			}
-			else if (e.keyCode == '38' && superNewLogicDirection !== 'down') {
+			else if (e.keyCode == '38' && superNewLogicDirection !== 'down' && superNewLogicDirection !== 'up') {
 				keyQueue.push('up');
 			}
-			else if (e.keyCode == '39' && superNewLogicDirection !== 'left') {
+			else if (e.keyCode == '39' && superNewLogicDirection !== 'left' && superNewLogicDirection !== 'right') {
 				keyQueue.push('right');
 			}
-			else if (e.keyCode == '40' && superNewLogicDirection !== 'up') {
+			else if (e.keyCode == '40' && superNewLogicDirection !== 'up' && superNewLogicDirection !== 'down') {
 				keyQueue.push('down');
 			}
 
@@ -204,6 +208,7 @@
 			currentDirection = '';
 			keyQueue = [];
 			alive = true;
+			speed = 0;
 
 			snakeArray.length = 0;
 			const newSnake = new Rectangle(9, 9, currentDirection);
@@ -217,8 +222,8 @@
 		//Der Anfang des Spiel
 		const minRow = 0;
 		const minColumn = 0;
-		const maxRow = 15;
-		const maxColumn = 45;
+		const maxRow = 10;
+		const maxColumn = 10;
 
 		let currentDirection; // left up right down
 		let keyQueue;
@@ -263,7 +268,11 @@
 
 		const delay = ms => new Promise(res => setTimeout(res, ms));
 
-		const startGame = async () => {
+		const startGame = async (ingame = true) => {
+			if (ingame) {
+				alive = false;
+				await delay(350);
+			}
 			freshGame();
 			while (alive) {
 
@@ -290,16 +299,11 @@
 					}
 				}
 				render();
-
-
 			}
 		};
 
-
-
-
+		startGame(false);
 	</script>
-
 </body>
 
 </html>
